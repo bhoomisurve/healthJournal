@@ -71,9 +71,5 @@ python app.py
 ❗ Disclaimer
 
 This app is intended for educational and informational purposes only. It does not provide professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical concerns.
----
-👩‍💻 Author
 
-Bhoomika Surve
-🔗 LinkedIn
 
