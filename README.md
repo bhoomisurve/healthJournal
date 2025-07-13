@@ -25,8 +25,25 @@
 - **AI Logic**: Rule-based symptom analysis
 
 ---
+## 🖼️ Screenshots
 
+### 🔹 Home Page
+![Home](screenshots/base.png)
 
+### 🔹 Alternative Home Layout
+![Home 2](screenshots/base2.png)
+
+### 📊 Dashboard
+![Dashboard](screenshots/dash.png)
+
+### 📊 Dashboard View 2
+![Dashboard 2](screenshots/dashboard2.png)
+
+### 🧠 AI Symptom Checker
+![Symptom Checker](screenshots/sym.png)
+
+### 📝 Symptom Logging Form
+![Log Symptoms](screenshots/ds3.png)
 ---
 
 ## ⚙️ Setup Instructions
@@ -56,7 +73,7 @@ python app.py
 This app is intended for educational and informational purposes only. It does not provide professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider for medical concerns.
 ---
 👩‍💻 Author
+
 Bhoomika Surve
 🔗 LinkedIn
-🐙 GitHub
 
