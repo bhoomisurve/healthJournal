@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}HealthJournal - Track Your Health Journey{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-heartbeat"></i> HealthJournal</h1>
+    <p>Your personal health tracking companion</p>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-shield-alt"></i> Welcome to HealthJournal
+        </div>
+        <div class="card-body">
+            <h3>Track Your Health Journey</h3>
+            <p>HealthJournal is your personal health companion that helps you monitor symptoms, track your wellness journey, and make informed decisions about your health.</p>
+            
+            <div style="margin: 2rem 0;">
+                <h4>Features:</h4>
+                <ul style="margin-left: 2rem; margin-top: 1rem;">
+                    <li><i class="fas fa-check"></i> Log daily symptoms and severity</li>
+                    <li><i class="fas fa-check"></i> AI-powered symptom analysis</li>
+                    <li><i class="fas fa-check"></i> Personal health notes</li>
+                    <li><i class="fas fa-check"></i> Export your health data</li>
+                    <li><i class="fas fa-check"></i> Secure and private</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="{{ url_for('register') }}" class="btn btn-primary" style="margin-right: 1rem;">
+                    <i class="fas fa-user-plus"></i> Get Started
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-info-circle"></i> How It Works
+        </div>
+        <div class="card-body">
+            <div style="text-align: center;">
+                <div style="margin-bottom: 2rem;">
+                    <i class="fas fa-user-plus" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h4>1. Sign Up</h4>
+                    <p>Create your secure account to start tracking your health.</p>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <i class="fas fa-clipboard-list" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h4>2. Log Symptoms</h4>
+                    <p>Record your symptoms, severity levels, and personal notes.</p>
+                </div>
+                
+                <div style="margin-bottom: 2rem;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h4>3. Get Insights</h4>
+                    <p>Use our AI symptom checker for preliminary analysis.</p>
+                </div>
+                
+                <div>
+                    <i class="fas fa-chart-line" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h4>4. Track Progress</h4>
+                    <p>Monitor your health journey over time.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">
+        <i class="fas fa-exclamation-triangle"></i> Important Medical Disclaimer
+    </div>
+    <div class="card-body">
+        <div style="background: #fff3cd; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #ffc107;">
+            <h4 style="color: #856404; margin-bottom: 1rem;">
+                <i class="fas fa-exclamation-triangle"></i> Medical Disclaimer
+            </h4>
+            <p style="color: #856404; margin-bottom: 1rem;">
+                <strong>This application is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment.</strong>
+            </p>
+            <ul style="color: #856404; margin-left: 2rem;">
+                <li>Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</li>
+                <li>Never disregard professional medical advice or delay in seeking it because of something you have read on this application.</li>
+                <li>If you think you may have a medical emergency, call your doctor or emergency services immediately.</li>
+                <li>The AI symptom checker provides general information only and should not be used for diagnosis.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card ul li {
+        margin-bottom: 0.5rem;
+    }
+    
+    .card ul li i {
+        color: #28a745;
+        margin-right: 0.5rem;
+    }
+</style>
+{% endblock %}

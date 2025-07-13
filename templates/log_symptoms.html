@@ -1,0 +1,253 @@
+{% extends "base.html" %}
+
+{% block title %}Log Symptoms - HealthJournal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-plus-circle"></i> Log Your Symptoms</h1>
+    <p>Record your symptoms to track your health journey</p>
+</div>
+
+<div style="max-width: 600px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-thermometer-half"></i> Symptom Entry
+        </div>
+        <div class="card-body">
+            <form method="POST" id="symptom-form">
+                <div class="form-group">
+                    <label for="symptoms">
+                        <i class="fas fa-list-ul"></i> Describe Your Symptoms
+                    </label>
+                    <textarea id="symptoms" name="symptoms" class="form-control" required 
+                              placeholder="Describe your symptoms in detail (e.g., headache, fever, cough, nausea, fatigue...)"
+                              rows="4"></textarea>
+                    <small style="color: #666;">
+                        <i class="fas fa-info-circle"></i> Be as specific as possible. Include location, duration, and any triggers you've noticed.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="severity">
+                        <i class="fas fa-chart-line"></i> Severity Level (1-10)
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <input type="range" id="severity" name="severity" min="1" max="10" value="5" 
+                               style="flex: 1; height: 8px; border-radius: 4px; background: #e0e0e0; outline: none;">
+                        <div id="severity-display" style="min-width: 80px; text-align: center; font-weight: bold; font-size: 1.2rem;">
+                            5
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem; color: #666;">
+                        <span><i class="fas fa-smile" style="color: #28a745;"></i> Mild</span>
+                        <span><i class="fas fa-meh" style="color: #ffc107;"></i> Moderate</span>
+                        <span><i class="fas fa-frown" style="color: #dc3545;"></i> Severe</span>
+                    </div>
+                    <div id="severity-description" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 4px; font-size: 0.9rem;">
+                        Moderate discomfort - noticeable but manageable
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">
+                        <i class="fas fa-sticky-note"></i> Additional Notes (Optional)
+                    </label>
+                    <textarea id="notes" name="notes" class="form-control" 
+                              placeholder="Any additional information, triggers, medications taken, or observations..."
+                              rows="3"></textarea>
+                    <small style="color: #666;">
+                        Include any relevant context like recent activities, food consumed, stress levels, etc.
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <i class="fas fa-clock"></i> When did these symptoms start?
+                    </label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="onset" value="just_now" style="margin: 0;">
+                            <span>Just now</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="onset" value="today" checked style="margin: 0;">
+                            <span>Earlier today</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="onset" value="yesterday" style="margin: 0;">
+                            <span>Yesterday</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                            <input type="radio" name="onset" value="few_days" style="margin: 0;">
+                            <span>Few days ago</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                    <i class="fas fa-save"></i> Log Symptoms
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Symptom Buttons -->
+    <div class="card" style="margin-top: 2rem;">
+        <div class="card-header">
+            <i class="fas fa-zap"></i> Quick Symptom Selection
+        </div>
+        <div class="card-body">
+            <p style="margin-bottom: 1rem; color: #666;">Click on common symptoms to quickly add them to your description:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                <button type="button" class="quick-symptom" data-symptom="headache">
+                    <i class="fas fa-brain"></i> Headache
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="fever">
+                    <i class="fas fa-thermometer-three-quarters"></i> Fever
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="cough">
+                    <i class="fas fa-lungs"></i> Cough
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="nausea">
+                    <i class="fas fa-dizzy"></i> Nausea
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="fatigue">
+                    <i class="fas fa-tired"></i> Fatigue
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="sore throat">
+                    <i class="fas fa-head-side-cough"></i> Sore Throat
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="muscle aches">
+                    <i class="fas fa-dumbbell"></i> Muscle Aches
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="dizziness">
+                    <i class="fas fa-arrows-spin"></i> Dizziness
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="chest pain">
+                    <i class="fas fa-heart"></i> Chest Pain
+                </button>
+                <button type="button" class="quick-symptom" data-symptom="shortness of breath">
+                    <i class="fas fa-wind"></i> Shortness of Breath
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical Disclaimer -->
+    <div class="card" style="margin-top: 2rem;">
+        <div class="card-body">
+            <div style="background: #fff3cd; padding: 1rem; border-radius: 8px; border-left: 4px solid #ffc107;">
+                <h4 style="color: #856404; margin-bottom: 0.5rem;">
+                    <i class="fas fa-exclamation-triangle"></i> Important Reminder
+                </h4>
+                <p style="color: #856404; margin: 0; font-size: 0.9rem;">
+                    If you're experiencing severe symptoms, chest pain, difficulty breathing, or any emergency symptoms, 
+                    please seek immediate medical attention or call emergency services.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .quick-symptom {
+        padding: 0.5rem 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 20px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+    }
+    
+    .quick-symptom:hover {
+        border-color: #667eea;
+        color: #667eea;
+        transform: translateY(-2px);
+    }
+    
+    .quick-symptom.selected {
+        background: #667eea;
+        color: white;
+        border-color: #667eea;
+    }
+    
+    #severity-display {
+        padding: 0.5rem;
+        border-radius: 8px;
+        background: #f8f9fa;
+        border: 2px solid #e0e0e0;
+    }
+    
+    #severity-description {
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+    }
+</style>
+
+<script>
+    // Severity slider functionality
+    const severitySlider = document.getElementById('severity');
+    const severityDisplay = document.getElementById('severity-display');
+    const severityDescription = document.getElementById('severity-description');
+    
+    const severityDescriptions = {
+        1: { text: 'Very mild - barely noticeable', color: '#28a745' },
+        2: { text: 'Mild - slight discomfort', color: '#28a745' },
+        3: { text: 'Mild to moderate - minor interference', color: '#6f42c1' },
+        4: { text: 'Moderate - noticeable discomfort', color: '#6f42c1' },
+        5: { text: 'Moderate - manageable but bothersome', color: '#ffc107' },
+        6: { text: 'Moderate to severe - interferes with activities', color: '#fd7e14' },
+        7: { text: 'Severe - difficult to ignore', color: '#dc3545' },
+        8: { text: 'Severe - significantly limits activities', color: '#dc3545' },
+        9: { text: 'Very severe - unable to function normally', color: '#dc3545' },
+        10: { text: 'Extreme - worst possible pain/discomfort', color: '#dc3545' }
+    };
+    
+    function updateSeverityDisplay() {
+        const value = severitySlider.value;
+        const desc = severityDescriptions[value];
+        severityDisplay.textContent = value;
+        severityDisplay.style.color = desc.color;
+        severityDescription.textContent = desc.text;
+        severityDescription.style.color = desc.color;
+        severityDescription.style.borderColor = desc.color;
+    }
+    
+    severitySlider.addEventListener('input', updateSeverityDisplay);
+    
+    // Quick symptom selection
+    document.querySelectorAll('.quick-symptom').forEach(button => {
+        button.addEventListener('click', function() {
+            const symptom = this.dataset.symptom;
+            const symptomsTextarea = document.getElementById('symptoms');
+            
+            // Toggle selection
+            this.classList.toggle('selected');
+            
+            // Add or remove from textarea
+            let currentText = symptomsTextarea.value;
+            if (this.classList.contains('selected')) {
+                if (currentText) {
+                    symptomsTextarea.value = currentText + ', ' + symptom;
+                } else {
+                    symptomsTextarea.value = symptom;
+                }
+            } else {
+                // Remove the symptom from the text
+                symptomsTextarea.value = currentText.replace(new RegExp(symptom + ',?\\s*', 'gi'), '').replace(/,\s*$/, '');
+            }
+        });
+    });
+    
+    // Form submission
+    document.getElementById('symptom-form').addEventListener('submit', function(e) {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging Symptoms...';
+        submitBtn.disabled = true;
+    });
+    
+    // Initialize severity display
+    updateSeverityDisplay();
+</script>
+{% endblock %}

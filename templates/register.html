@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Register - HealthJournal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-user-plus"></i> Create Account</h1>
+    <p>Join HealthJournal and start tracking your health journey</p>
+</div>
+
+<div style="max-width: 500px; margin: 0 auto;">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-user-plus"></i> Sign Up
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> Username
+                    </label>
+                    <input type="text" id="username" name="username" class="form-control" required 
+                           placeholder="Enter your username" minlength="3" maxlength="20">
+                    <small style="color: #666;">3-20 characters, letters and numbers only</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Email Address
+                    </label>
+                    <input type="email" id="email" name="email" class="form-control" required 
+                           placeholder="Enter your email address">
+                    <small style="color: #666;">We'll never share your email with anyone</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Password
+                    </label>
+                    <input type="password" id="password" name="password" class="form-control" required 
+                           placeholder="Create a secure password" minlength="6">
+                    <small style="color: #666;">Minimum 6 characters</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">
+                        <i class="fas fa-lock"></i> Confirm Password
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required 
+                           placeholder="Confirm your password">
+                    <small id="password-match" style="color: #dc3545; display: none;">Passwords do not match</small>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" required style="margin: 0;">
+                        <span>I agree to the <a href="#" style="color: #667eea;">Terms of Service</a> and <a href="#" style="color: #667eea;">Privacy Policy</a></span>
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" style="margin: 0;">
+                        <span>I acknowledge that this app is for informational purposes only and not a substitute for professional medical advice</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="register-btn">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+
+            <div style="text-align: center; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #eee;">
+                <p>Already have an account? 
+                    <a href="{{ url_for('login') }}" style="color: #667eea; text-decoration: none; font-weight: 500;">
+                        Login here <i class="fas fa-arrow-right"></i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="margin-top: 2rem;">
+        <div class="card-header">
+            <i class="fas fa-shield-alt"></i> Your Privacy & Security
+        </div>
+        <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                <div style="text-align: center;">
+                    <i class="fas fa-lock" style="font-size: 2rem; color: #28a745; margin-bottom: 0.5rem;"></i>
+                    <h4>Secure Storage</h4>
+                    <p>Your health data is encrypted and stored securely.</p>
+                </div>
+                <div style="text-align: center;">
+                    <i class="fas fa-user-shield" style="font-size: 2rem; color: #28a745; margin-bottom: 0.5rem;"></i>
+                    <h4>Private Data</h4>
+                    <p>Only you can access your personal health information.</p>
+                </div>
+                <div style="text-align: center;">
+                    <i class="fas fa-download" style="font-size: 2rem; color: #28a745; margin-bottom: 0.5rem;"></i>
+                    <h4>Export Anytime</h4>
+                    <p>Download your health data whenever you need it.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Password confirmation validation
+    document.getElementById('confirm_password').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        const matchIndicator = document.getElementById('password-match');
+        const registerBtn = document.getElementById('register-btn');
+        
+        if (password !== confirmPassword && confirmPassword !== '') {
+            matchIndicator.style.display = 'block';
+            registerBtn.disabled = true;
+            registerBtn.style.opacity = '0.5';
+        } else {
+            matchIndicator.style.display = 'none';
+            registerBtn.disabled = false;
+            registerBtn.style.opacity = '1';
+        }
+    });
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert('Passwords do not match!');
+        }
+    });
+</script>
+{% endblock %}

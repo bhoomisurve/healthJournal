@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}Add Health Note - Health Journal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-sticky-note"></i> Add Health Note</h1>
+    <p>Document important health information, appointments, or observations</p>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-pen"></i> Create New Health Note
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="title">Note Title</label>
+                    <input type="text" name="title" id="title" class="form-control" 
+                           placeholder="e.g., Doctor Visit, Medication Change, Test Results..." 
+                           required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Note Content</label>
+                    <textarea name="content" id="content" class="form-control" rows="8" 
+                              placeholder="Write your health note here...
+
+Examples:
+- Doctor appointment notes
+- Medication changes and effects
+- Test results and interpretations
+- General health observations
+- Questions for next doctor visit
+- Recovery progress notes" 
+                              required></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Note
+                    </button>
+                    <a href="{{ url_for('health_journal') }}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-lightbulb"></i> Note Taking Tips
+        </div>
+        <div class="card-body">
+            <h3>What to Include in Your Health Notes:</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 5px;">
+                    <i class="fas fa-user-md" style="color: #667eea;"></i>
+                    <strong>Doctor Visits:</strong> Diagnosis, treatment plans, prescriptions, follow-up instructions
+                </li>
+                <li style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 5px;">
+                    <i class="fas fa-pills" style="color: #667eea;"></i>
+                    <strong>Medications:</strong> Dosage changes, side effects, effectiveness
+                </li>
+                <li style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 5px;">
+                    <i class="fas fa-vial" style="color: #667eea;"></i>
+                    <strong>Test Results:</strong> Lab work, imaging, vital signs
+                </li>
+                <li style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 5px;">
+                    <i class="fas fa-heart" style="color: #667eea;"></i>
+                    <strong>Wellness:</strong> Exercise, diet changes, sleep patterns
+                </li>
+                <li style="margin-bottom: 1rem; padding: 0.5rem; background: #f8f9fa; border-radius: 5px;">
+                    <i class="fas fa-question-circle" style="color: #667eea;"></i>
+                    <strong>Questions:</strong> Things to ask your doctor next visit
+                </li>
+            </ul>
+            
+            <div class="alert alert-warning">
+                <i class="fas fa-shield-alt"></i>
+                <strong>Privacy:</strong> Your health notes are stored securely and only you can access them.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Templates -->
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">
+        <i class="fas fa-clipboard-list"></i> Quick Templates
+    </div>
+    <div class="card-body">
+        <p>Click on a template to fill in the form:</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <button class="template-btn" onclick="fillTemplate('doctor', 'Doctor Visit - [Date]', 'Doctor: \nReason for visit: \nSymptoms discussed: \nDiagnosis: \nTreatment plan: \nPrescriptions: \nFollow-up: \nNotes: ')">
+                <i class="fas fa-user-md"></i> Doctor Visit
+            </button>
+            <button class="template-btn" onclick="fillTemplate('medication', 'Medication Update - [Date]', 'Medication: \nDosage: \nReason for change: \nSide effects: \nEffectiveness: \nNotes: ')">
+                <i class="fas fa-pills"></i> Medication Update
+            </button>
+            <button class="template-btn" onclick="fillTemplate('test', 'Test Results - [Date]', 'Test type: \nResults: \nNormal ranges: \nDoctor comments: \nNext steps: \nNotes: ')">
+                <i class="fas fa-vial"></i> Test Results
+            </button>
+            <button class="template-btn" onclick="fillTemplate('wellness', 'Wellness Check - [Date]', 'Weight: \nBlood pressure: \nExercise: \nDiet: \nSleep: \nMood: \nNotes: ')">
+                <i class="fas fa-heart"></i> Wellness Check
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .template-btn {
+        padding: 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        font-size: 0.9rem;
+    }
+    
+    .template-btn:hover {
+        border-color: #667eea;
+        background: #f8f9fa;
+        transform: translateY(-2px);
+    }
+    
+    .template-btn i {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #667eea;
+    }
+</style>
+
+<script>
+    function fillTemplate(type, title, content) {
+        const now = new Date().toLocaleDateString();
+        const titleField = document.getElementById('title');
+        const contentField = document.getElementById('content');
+        
+        titleField.value = title.replace('[Date]', now);
+        contentField.value = content;
+        
+        // Scroll to form
+        titleField.scrollIntoView({ behavior: 'smooth' });
+        titleField.focus();
+    }
+    
+    // Auto-resize textarea
+    document.getElementById('content').addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
+</script>
+{% endblock %}

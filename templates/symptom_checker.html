@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Symptom Checker - Health Journal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-search"></i> AI Symptom Checker</h1>
+    <p>Get insights about your symptoms with our AI-powered checker</p>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-clipboard-list"></i> Describe Your Symptoms
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="form-group">
+                    <label for="symptoms">What symptoms are you experiencing?</label>
+                    <textarea name="symptoms" id="symptoms" class="form-control" rows="4" 
+                              placeholder="Describe your symptoms in detail (e.g., headache, fever, cough, nausea...)" 
+                              required>{{ symptoms if symptoms else '' }}</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="severity">How severe are your symptoms? (1-10)</label>
+                    <input type="range" name="severity" id="severity" min="1" max="10" 
+                           value="{{ severity if severity else '5' }}" class="form-control">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">
+                        <span>1 - Mild</span>
+                        <span id="severity-value">{{ severity if severity else '5' }}</span>
+                        <span>10 - Severe</span>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Analyze Symptoms
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    {% if analysis %}
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-brain"></i> AI Analysis Results
+        </div>
+        <div class="card-body">
+            {% if analysis.emergency_warning %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>⚠️ HIGH PRIORITY:</strong> Some of your symptoms may require immediate medical attention.
+                </div>
+            {% endif %}
+            
+            <div class="form-group">
+                <strong>Severity Assessment:</strong>
+                <span class="severity-badge {% if analysis.severity_assessment == 'High Priority' %}high{% else %}medium{% endif %}">
+                    {{ analysis.severity_assessment }}
+                </span>
+            </div>
+            
+            {% if analysis.matches %}
+                <div class="form-group">
+                    <strong>Possible Causes:</strong>
+                    {% for match in analysis.matches %}
+                        <div style="margin-bottom: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                            <h4 style="color: #667eea; margin-bottom: 0.5rem;">{{ match.symptom.title() }}</h4>
+                            <p><strong>Common causes:</strong> {{ match.data.causes|join(', ') }}</p>
+                            <p><strong>Advice:</strong> {{ match.data.advice }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            
+            <div class="alert alert-warning">
+                <i class="fas fa-info-circle"></i>
+                <strong>Important:</strong> {{ analysis.general_advice }}
+            </div>
+            
+            <div style="margin-top: 1rem;">
+                <a href="{{ url_for('log_symptoms') }}" class="btn btn-success">
+                    <i class="fas fa-plus"></i> Log These Symptoms
+                </a>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-info-circle"></i> How It Works
+        </div>
+        <div class="card-body">
+            <h3>AI-Powered Symptom Analysis</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #28a745;"></i> Describe your symptoms in detail</li>
+                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #28a745;"></i> Rate severity from 1-10</li>
+                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #28a745;"></i> Get instant AI analysis</li>
+                <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #28a745;"></i> Receive personalized advice</li>
+            </ul>
+            
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <strong>Disclaimer:</strong> This tool provides general information only and should not replace professional medical advice. Always consult healthcare providers for proper diagnosis and treatment.
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    // Update severity display
+    const severitySlider = document.getElementById('severity');
+    const severityValue = document.getElementById('severity-value');
+    
+    severitySlider.addEventListener('input', function() {
+        severityValue.textContent = this.value;
+    });
+</script>
+{% endblock %}

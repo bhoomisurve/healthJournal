@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - HealthJournal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><i class="fas fa-tachometer-alt"></i> Health Dashboard</h1>
+    <p>Welcome back, {{ session.username }}! Here's your health overview</p>
+</div>
+
+<!-- Quick Actions -->
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <i class="fas fa-bolt"></i> Quick Actions
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="{{ url_for('log_symptoms') }}" class="btn btn-primary" style="padding: 1.5rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-plus-circle" style="font-size: 2rem;"></i>
+                <span>Log Symptoms</span>
+            </a>
+            <a href="{{ url_for('symptom_checker_route') }}" class="btn btn-success" style="padding: 1.5rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-search" style="font-size: 2rem;"></i>
+                <span>Symptom Checker</span>
+            </a>
+            <a href="{{ url_for('add_note') }}" class="btn btn-secondary" style="padding: 1.5rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-sticky-note" style="font-size: 2rem;"></i>
+                <span>Add Note</span>
+            </a>
+            <a href="{{ url_for('export_journal') }}" class="btn btn-danger" style="padding: 1.5rem; text-decoration: none; display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-download" style="font-size: 2rem;"></i>
+                <span>Export Data</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <!-- Recent Symptoms -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-thermometer-half"></i> Recent Symptoms
+        </div>
+        <div class="card-body">
+            {% if recent_symptoms %}
+                <div style="space-y: 1rem;">
+                    {% for symptom in recent_symptoms %}
+                        <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                                <h4 style="margin: 0; color: #333;">{{ symptom[0] }}</h4>
+                                <span class="severity-badge {% if symptom[1] <= 3 %}low{% elif symptom[1] <= 6 %}medium{% else %}high{% endif %}">
+                                    Severity: {{ symptom[1] }}/10
+                                </span>
+                            </div>
+                            {% if symptom[2] %}
+                                <p style="margin: 0.5rem 0; color: #666; font-style: italic;">{{ symptom[2] }}</p>
+                            {% endif %}
+                            <small style="color: #888;">
+                                <i class="fas fa-clock"></i> {{ symptom[3] }}
+                            </small>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a href="{{ url_for('health_journal') }}" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> View All Symptoms
+                    </a>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 2rem; color: #666;">
+                    <i class="fas fa-clipboard-list" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                    <h3>No symptoms logged yet</h3>
+                    <p>Start tracking your health by logging your first symptom.</p>
+                    <a href="{{ url_for('log_symptoms') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Log Your First Symptom
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Health Notes -->
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-sticky-note"></i> Recent Health Notes
+        </div>
+        <div class="card-body">
+            {% if recent_notes %}
+                <div style="space-y: 1rem;">
+                    {% for note in recent_notes %}
+                        <div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 1rem; margin-bottom: 1rem;">
+                            <h4 style="margin: 0 0 0.5rem 0; color: #333;">{{ note[0] }}</h4>
+                            <p style="margin: 0.5rem 0; color: #666; line-height: 1.5;">
+                                {{ note[1][:100] }}{% if note[1]|length > 100 %}...{% endif %}
+                            </p>
+                            <small style="color: #888;">
+                                <i class="fas fa-calendar"></i> {{ note[2] }}
+                            </small>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div style="text-align: center; margin-top: 1.5rem;">
+                    <a href="{{ url_for('health_journal') }}" class="btn btn-primary">
+                        <i class="fas fa-book"></i> View All Notes
+                    </a>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 2rem; color: #666;">
+                    <i class="fas fa-sticky-note" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;"></i>
+                    <h3>No health notes yet</h3>
+                    <p>Keep track of important health information with personal notes.</p>
+                    <a href="{{ url_for('add_note') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Your First Note
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Health Stats -->
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">
+        <i class="fas fa-chart-bar"></i> Health Statistics
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; text-align: center;">
+            <div>
+                <div style="font-size: 3rem; font-weight: bold; color: #667eea; margin-bottom: 0.5rem;">
+                    {{ recent_symptoms|length }}
+                </div>
+                <div style="color: #666;">
+                    <i class="fas fa-thermometer-half"></i> Recent Symptoms
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 3rem; font-weight: bold; color: #28a745; margin-bottom: 0.5rem;">
+                    {{ recent_notes|length }}
+                </div>
+                <div style="color: #666;">
+                    <i class="fas fa-sticky-note"></i> Health Notes
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 3rem; font-weight: bold; color: #ffc107; margin-bottom: 0.5rem;">
+                    {% if recent_symptoms %}
+                        {{ "%.1f"|format(recent_symptoms|map(attribute=1)|sum / recent_symptoms|length) }}
+                    {% else %}
+                        0
+                    {% endif %}
+                </div>
+                <div style="color: #666;">
+                    <i class="fas fa-chart-line"></i> Avg. Severity
+                </div>
+            </div>
+            <div>
+                <div style="font-size: 3rem; font-weight: bold; color: #dc3545; margin-bottom: 0.5rem;">
+                    7
+                </div>
+                <div style="color: #666;">
+                    <i class="fas fa-calendar"></i> Days Active
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Tips -->
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">
+        <i class="fas fa-lightbulb"></i> Health Tips
+    </div>
+    <div class="card-body">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div style="border-left: 4px solid #28a745; padding-left: 1rem;">
+                <h4 style="color: #28a745; margin-bottom: 0.5rem;">
+                    <i class="fas fa-apple-alt"></i> Stay Hydrated
+                </h4>
+                <p style="margin: 0; color: #666;">Drink at least 8 glasses of water daily to maintain optimal health and help your body function properly.</p>
+            </div>
+            <div style="border-left: 4px solid #667eea; padding-left: 1rem;">
+                <h4 style="color: #667eea; margin-bottom: 0.5rem;">
+                    <i class="fas fa-bed"></i> Get Quality Sleep
+                </h4>
+                <p style="margin: 0; color: #666;">Aim for 7-9 hours of quality sleep each night to support your immune system and overall well-being.</p>
+            </div>
+            <div style="border-left: 4px solid #ffc107; padding-left: 1rem;">
+                <h4 style="color: #ffc107; margin-bottom: 0.5rem;">
+                    <i class="fas fa-running"></i> Stay Active
+                </h4>
+                <p style="margin: 0; color: #666;">Regular physical activity can help prevent chronic diseases and improve your mental health.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn {
+        transition: all 0.3s ease;
+    }
+    
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .severity-badge {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
